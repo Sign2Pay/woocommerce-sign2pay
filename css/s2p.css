@@ -1,0 +1,8 @@
+.payment_method_sign2pay{
+  display:none;
+}
+
+.payment_method_sign2pay label img{
+  max-width:100px;
+  margin-top: 10px;
+}
