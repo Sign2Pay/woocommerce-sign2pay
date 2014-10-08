@@ -9,6 +9,7 @@
 class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
 {
     var $notify_url;
+    var $s2p_domain;
 
     public function __construct()
     {
@@ -19,6 +20,11 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
         $this->order_button_text    = __( 'Proceed to Sign2Pay', 'woocommerce' );
         $this->notify_url           = WC()->api_request_url( 'WC_Gateway_Sign2Pay' );
 
+        if("local.wordpress.dev" == $_SERVER['SERVER_NAME']){
+          $this->s2p_domain = "sign2pay.dev";
+        }else{
+          $this->s2p_domain = "sign2pay.com";
+        }
 
         // Create plugin fields and settings
         $this->init_form_fields();
@@ -51,7 +57,6 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
         wp_register_script( 's2pAdminJS', plugins_url('js/s2p_admin.js', __FILE__), array('jquery'), SIGN2PAY__VERSION, true );
         wp_register_script( 's2pSweetJS', plugins_url('js/sweet-alert.min.js', __FILE__), array('jquery'), SIGN2PAY__VERSION, true );
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-
 
         // Payment listener/API hook
         add_action( 'woocommerce_api_wc_gateway_sign2pay', array( $this, 'check_s2p_postback' ) );

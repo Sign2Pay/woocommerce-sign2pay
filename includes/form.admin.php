@@ -6,11 +6,7 @@
  * License: GPL version 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 ?>
-<style type="text/css">
 
-
-
-</style>
 <div class="s2p_header">
   <h3 class="s2p_title">
       <img src='<?php echo $this->icon; ?>'/>

@@ -60,7 +60,7 @@
     merchant_id: <?php echo '"' . $this->get_option( 'merchant_id' )  .'"' ?>,
     token: <?php echo '"' . $this->get_option( 'token' ) .'"' ?>,
     checkout_type: 'multi',
-    domain : "sign2pay.com",
+    domain : <?php echo '"' . $this->s2p_domain .'"' ?>,
     launch : "on_load",
     first_name: <?php echo '"' . $order->billing_first_name .'"' ?>,
     last_name: <?php echo '"' . $order->billing_last_name .'"' ?>,
@@ -77,7 +77,7 @@
   (function() {
     var s = document.createElement("script");
     s.type = "text/javascript";
-    s.src = "//sign2pay.com/assets/merchant.js";
+    s.src = <?php echo "'//" . $this->s2p_domain . "/assets/merchant.js';" ?>
     s.async = true;
     t = document.getElementsByTagName('script')[0];
     t.parentNode.insertBefore(s, t);

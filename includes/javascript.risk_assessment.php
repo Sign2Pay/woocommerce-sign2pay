@@ -15,15 +15,15 @@
 
 <script type="text/javascript">
   jQuery(function($) {
-    $("#payment li.payment_method_sign2pay:first").addClass("ignore").hide();
+    $("#payment li.payment_method_Sign2Pay:first").addClass("ignore").hide();
   });
 
   window.sign2PayOptions = {
-    el : "#payment li.payment_method_sign2pay:first",
+    el : "#payment li.payment_method_Sign2Pay:first",
     merchant_id: <?php echo '"' . $this->get_option( 'merchant_id' )  .'"' ?>,
     token: <?php echo '"' . $this->get_option( 'token' ) .'"' ?>,
     checkout_type: 'single',
-    domain : "sign2pay.com",
+    domain : <?php echo '"' . $this->s2p_domain .'"' ?>,
     map:{
       first_name: '#billing_first_name',
       last_name: '#billing_last_name',
@@ -46,7 +46,7 @@
   (function() {
     var s = document.createElement("script");
     s.type = "text/javascript";
-    s.src = "//sign2pay.com/assets/merchant.js";
+    s.src = <?php echo "'//" . $this->s2p_domain . "/assets/merchant.js';" ?>
     s.async = true;
     t = document.getElementsByTagName('script')[0];
     t.parentNode.insertBefore(s, t);
