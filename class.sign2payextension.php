@@ -19,12 +19,7 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
         $this->debug                = true;
         $this->order_button_text    = __( 'Proceed to Sign2Pay', 'woocommerce' );
         $this->notify_url           = WC()->api_request_url( 'WC_Gateway_Sign2Pay' );
-
-        if("local.wordpress.dev" == $_SERVER['SERVER_NAME']){
-          $this->s2p_domain = "sign2pay.dev";
-        }else{
-          $this->s2p_domain = "sign2pay.com";
-        }
+        $this->s2p_domain           = "sign2pay.com";
 
         // Create plugin fields and settings
         $this->init_form_fields();
