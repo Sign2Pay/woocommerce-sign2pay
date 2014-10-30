@@ -23,11 +23,15 @@
           console.log("all done");
         })
         .success(function(response){
-          sweetAlert("Yeehaw...", "Looks like you're good to go!", "success");
+          if(typeof(response.error) != "undefined"){
+            sweetAlert("Oops...", "Seems like your settings are incorrect. \n\n Please verify by signing into your Sign2Pay Merchant Admin.", "error");
+          }else{
+            sweetAlert("Yeehaw...", "Looks like you're good to go!", "success");
+          }
           console.log("all good");
         })
         .fail(function(response){
-          sweetAlert("Oops...", "Seems like your settings are incorrect. Please verify by signing into your Sign2Pay Merchant Admin.", "error");
+          sweetAlert("Oops...", "Seems like your settings are incorrect. \n\n Please verify by signing into your Sign2Pay Merchant Admin.", "error");
           console.log("not good");
       });
 

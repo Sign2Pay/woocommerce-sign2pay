@@ -2,8 +2,8 @@
 /*
  * Title   : Sign2Pay extension for Woo-Commerece
  * Author  : Sign2Pay
- * Url     : http://sign2pay.com
- * License: GPL version 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * Url     : https://www.sign2pay.com
+ * License : GPL version 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
@@ -31,11 +31,6 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
         // Load plugin checkout icon
         $this->icon         = WP_PLUGIN_URL . "/" . plugin_basename( dirname(__FILE__)) . '/images/s2p_logo_receipt.png';
 
-        // Logs
-        if ( 'yes' == $this->debug ) {
-          $this->log = new WC_Logger();
-        }
-
         // tell WooCommerce to save options
         add_action( 'woocommerce_update_options_payment_gateways_' . $this->id  , array($this, 'process_admin_options'));
         add_action( 'admin_notices'                                             , array($this, 'perform_ssl_check'    ));
@@ -55,6 +50,28 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
 
         // Payment listener/API hook
         add_action( 'woocommerce_api_wc_gateway_sign2pay', array( $this, 'check_s2p_postback' ) );
+    }
+
+
+    /**
+     * Log errors / messages to WooCommerce error log
+     *
+     * @since 2.1
+     * @param string $message
+     */
+    public function log( $message ) {
+
+      if ( version_compare( WOOCOMMERCE_VERSION, '2.1', '<' ) ) {
+        global $woocommerce;
+
+        if ( ! is_object( $this->logger ) )
+          $this->logger = $woocommerce->logger();
+      } else {
+        if ( ! is_object( $this->logger ) )
+          $this->logger = new WC_Logger();
+      }
+
+      $this->logger->add( 'sign2pay', $message );
     }
 
     /*
@@ -221,7 +238,7 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
 
     if (false == $requirements_met) {
       if ( 'yes' == $this->debug ) {
-        $this->log->add( 'sign2pay', 'Malformed Postback - Missing Required: ' . implode(",", array_diff($required_keys, array_keys($s2p_postback))));
+        $this->log('Malformed Postback - Missing Required: ' . implode(",", array_diff($required_keys, array_keys($s2p_postback))), "error");
       }
       return false;
     }
@@ -230,7 +247,7 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
 
     if(false == $order_exists){
       if ( 'yes' == $this->debug ) {
-        $this->log->add( 'sign2pay', 'Malformed Postback - Order Does not Exist: ' . $s2p_postback["ref_id"]);
+        $this->log('Malformed Postback - Order Does not Exist: ' . $s2p_postback["ref_id"], "error");
       }
       return false;
     }
@@ -239,7 +256,7 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
 
     if(false == $valid_signature){
       if ( 'yes' == $this->debug ) {
-        $this->log->add( 'sign2pay', 'Malformed Postback - Invalid Signature: ' . implode(",", $s2p_postback));
+        $this->log('Malformed Postback - Invalid Signature: ' . implode(",", $s2p_postback), "error");
       }
       return false;
     }
@@ -266,7 +283,7 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
       }
 
       if ( 'yes' == $this->debug ) {
-        $this->log->add( 'sign2pay', $message);
+        $this->log($message, "error");
       }
 
       $this->postback_failed_with_message($order_id, $message);
