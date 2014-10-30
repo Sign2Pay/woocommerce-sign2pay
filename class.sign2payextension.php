@@ -20,6 +20,7 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
         $this->order_button_text    = __( 'Proceed to Sign2Pay', 'woocommerce' );
         $this->notify_url           = WC()->api_request_url( 'WC_Gateway_Sign2Pay' );
         $this->s2p_domain           = "sign2pay.com";
+        $this->serving_from         = $this->get_implementation_url();
 
         // Create plugin fields and settings
         $this->init_form_fields();
@@ -83,6 +84,17 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
           }
     }
 
+    public function get_implementation_url(){
+      if(isset($_SERVER['HTTPS'])){
+            $protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") ? "https" : "http";
+        }
+        else{
+            $protocol = 'http';
+        }
+        return $protocol . "://" . $_SERVER['HTTP_HOST'];
+    }
+
+
     /*
      * Initialize Gateway Settings Form Fields.
      */
@@ -120,7 +132,7 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
       'api_details' => array(
         'title'       => __( 'API Credentials', 'woocommerce' ),
         'type'        => 'title',
-        'description' => sprintf( __( 'Enter your Sign2Pay API credentials from your %sMerchant Admin%s.', 'woocommerce' ), '<a href="https://merchant.sign2pay.com">', '</a>' ),
+        'description' => sprintf( __( 'Enter your Sign2Pay API credentials from your %sMerchant Admin%s. <p>Don\'t forget that the implementation URL your entered when creating your S2P application needs to be set to <strong> ' . $this->serving_from . '</strong>.</p>', 'woocommerce' ), '<a href="https://merchant.sign2pay.com">', '</a>' ),
       ),
       'merchant_id'    => array(
         'title'       => __( 'Merchant ID', 'woothemes' ),
