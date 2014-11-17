@@ -19,7 +19,7 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
         $this->debug                = true;
         $this->order_button_text    = __( 'Proceed to Sign2Pay', 'woocommerce' );
         $this->notify_url           = WC()->api_request_url( 'WC_Gateway_Sign2Pay' );
-        $this->s2p_domain           = "sign2pay.com";
+        $this->s2p_domain           = "sign2pay.dev";
         $this->serving_from         = $this->get_implementation_url();
 
         // Create plugin fields and settings
@@ -32,12 +32,6 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
         // Load plugin checkout icon
         $this->icon         = WP_PLUGIN_URL . "/" . plugin_basename( dirname(__FILE__)) . '/images/s2p_logo_receipt.png';
 
-        // tell WooCommerce to save options
-        add_action( 'woocommerce_update_options_payment_gateways_' . $this->id  , array($this, 'process_admin_options'));
-        add_action( 'admin_notices'                                             , array($this, 'perform_ssl_check'    ));
-        add_action( 'woocommerce_receipt_' . $this->id                          , array( $this, 'inline_sign2pay'     ));
-        add_action( 'woocommerce_thankyou'                                      , array($this, 'thankyou_page'        ));
-
         // style
         wp_register_style( 's2pStyleSheet', plugins_url('css/s2p.css', __FILE__) );
         wp_register_style( 's2pAdminStyleSheet', plugins_url('css/s2p_admin.css', __FILE__) );
@@ -47,10 +41,20 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
         wp_register_script( 'jquery-blockui', WC()->plugin_url() . '/assets/js/jquery-blockui/jquery.blockUI.min.js', array( 'jquery' ), '2.66', true );
         wp_register_script( 's2pAdminJS', plugins_url('js/s2p_admin.js', __FILE__), array('jquery'), SIGN2PAY__VERSION, true );
         wp_register_script( 's2pSweetJS', plugins_url('js/sweet-alert.min.js', __FILE__), array('jquery'), SIGN2PAY__VERSION, true );
+
+        // All WC Action hooks
+        add_action( 'woocommerce_update_options_payment_gateways_' . $this->id  , array($this, 'process_admin_options'));
+        add_action( 'admin_notices'                                             , array($this, 'perform_ssl_check'    ));
+        add_action( 'woocommerce_review_order_after_cart_contents'              , array($this, 'risk_assessment_js'   ));
+        add_action( 'woocommerce_receipt_' . $this->id                          , array($this, 'inline_sign2pay'      ));
+        add_action( 'woocommerce_thankyou'                                      , array($this, 'thankyou_page'        ));
+
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
         // Payment listener/API hook
         add_action( 'woocommerce_api_wc_gateway_sign2pay', array( $this, 'check_s2p_postback' ) );
+
+
     }
 
 
@@ -169,13 +173,28 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
     }
 
     /*
-     * UI - Payment page js for Sign2Pay.
+     * UI - Payment page markup for Sign2Pay.
      */
     public function payment_fields()
     {
-        global $woocommerce;
+      $out = "<script>jQuery(function($){ $('#payment li.payment_method_Sign2Pay:first').addClass('ignore').hide();});</script>";
+      if ( $this->description ) {
+        $out .= $this->description;
+      }
+      echo $out;
+    }
+
+    /*
+     * UI - Payment page js for Sign2Pay.
+     */
+    public function risk_assessment_js()
+    {
+      global $woocommerce;
+      if ( is_checkout() ) {
+        $risk_assessment = true;
         $total = $woocommerce->cart->total * 100;
         include_once('includes/javascript.risk_assessment.php');
+      }
     }
 
     /*
@@ -194,7 +213,6 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
      */
     function process_payment($order_id) {
       global $woocommerce;
-
       $order = new WC_Order( $order_id );
 
       return array(
@@ -207,6 +225,7 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
      * Order page that loads up Sign2Pay Inline Payments
      */
     function inline_sign2pay( $order_id ) {
+      $risk_assessment = false;
       $order = new WC_Order( $order_id );
       include_once('includes/javascript.payment.php');
     }

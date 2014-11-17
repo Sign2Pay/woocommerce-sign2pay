@@ -41,11 +41,7 @@
             lineHeight:     "24px",
           }
         });
-        $("#s2p_init_transport").on("click", function(){
-          if (typeof(window.s2p) !== "undefined") {
-            window.s2p.options.initTransport();
-          }
-        });
+
       '
       );
 
@@ -56,7 +52,7 @@
 
 <script type="text/javascript">
   window.sign2PayOptions = {
-    el : "#woocommerce_sign2pay",
+    el : "#s2p_init_transport",
     merchant_id: <?php echo '"' . $this->get_option( 'merchant_id' )  .'"' ?>,
     token: <?php echo '"' . $this->get_option( 'token' ) .'"' ?>,
     checkout_type: 'multi',
@@ -79,8 +75,8 @@
     s.type = "text/javascript";
     s.src = <?php echo "'//" . $this->s2p_domain . "/assets/merchant.js';" ?>
     s.async = true;
-    t = document.getElementsByTagName('script')[0];
-    t.parentNode.insertBefore(s, t);
+    t = document.getElementsByTagName('body')[0];
+    t.appendChild(s);
   })();
 
 
