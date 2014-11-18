@@ -1,12 +1,12 @@
 <?php
 /*
  * Plugin Name: WooCommerce Payment Gateway - Sign2Pay
- * Plugin URI: http://www.sign2pay.com/woocommerce/
- * Description: Process SEPA Direct Debit Payments in 18 European Countries
- * Version: 1.0.1
+ * Plugin URI: https://www.sign2pay.com/
+ * Description: Process Mobile Direct Debit Payments in 18 European Countries
+ * Version: 1.0.2
  * Author: sign2pay
  * Author URI: https://www.sign2pay.com
- * Requires at least: 3.1
+ * Requires at least: 4.0
 
  * @package WordPress
  * @author sign2pay
@@ -62,6 +62,17 @@ if ( ! function_exists( 'woothemes_queue_update' ) ) {
   require_once( 'includes/woo-includes/woo-functions.php' );
 }
 
+
+// add a 'Settings' link to the plugin action links
+add_filter( 'plugin_action_links_'. plugin_basename(__FILE__), 'add_plugin_setup_link');
+
+function add_plugin_setup_link( $actions ) {
+
+  $manage_url = admin_url( 'admin.php' );
+  $manage_url = add_query_arg( array( 'page' => 'wc-settings', 'tab' => 'checkout', 'section' => "WC_Gateway_Sign2Pay"), $manage_url ); // WC 2.0+
+  $links[] = '<a href="'. $manage_url .'">Settings</a>';
+  return (array_merge($links, $actions));
+}
 
 define( 'SIGN2PAY__VERSION', '1.0.0' );
 define( 'SIGN2PAY__TEXTDOMAIN', 'sign2pay' );
