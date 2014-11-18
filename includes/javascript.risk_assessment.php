@@ -7,6 +7,7 @@
  */
 ?>
 <?php if(isset($risk_assessment) && $risk_assessment == true) {?>
+
   <script type="text/javascript">
 
     window.sign2PayOptions = {
@@ -44,6 +45,16 @@
         window.s2p_merchant_script_appended = true;
         console.log("merchant_js appended");
     })();
+
+    jQuery(function($){
+      $('body').bind( 'update_checkout', function() {
+        if(typeof(window.s2p) != "undefined"){
+          if(typeof(window.s2p.options) != "undefined"){
+            window.s2p.options.reInitS2P();
+          }
+        }
+      });
+    });
 
   </script>
 <?php }?>

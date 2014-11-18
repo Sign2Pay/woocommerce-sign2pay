@@ -19,7 +19,7 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
         $this->debug                = true;
         $this->order_button_text    = __( 'Proceed to Sign2Pay', 'woocommerce' );
         $this->notify_url           = WC()->api_request_url( 'WC_Gateway_Sign2Pay' );
-        $this->s2p_domain           = "sign2pay.dev";
+        $this->s2p_domain           = "sign2pay.com";
         $this->s2p_api_version      = "v2";
         $this->log_path             = wc_get_log_file_path( 'sign2pay' );
         $this->serving_from         = $this->get_implementation_url();
@@ -47,7 +47,7 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
         // All WC Action hooks
         add_action( 'woocommerce_update_options_payment_gateways_' . $this->id  , array($this, 'process_admin_options'));
         add_action( 'admin_notices'                                             , array($this, 'perform_ssl_check'    ));
-        add_action( 'woocommerce_review_order_after_cart_contents'              , array($this, 'risk_assessment_js'   ));
+        add_action( 'woocommerce_review_order_before_submit'                    , array($this, 'risk_assessment_js'   ));
         add_action( 'woocommerce_receipt_' . $this->id                          , array($this, 'inline_sign2pay'      ));
         add_action( 'woocommerce_thankyou'                                      , array($this, 'thankyou_page'        ));
 
@@ -178,7 +178,8 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
      */
     public function payment_fields()
     {
-      $out = "<script>jQuery(function($){ $('#payment li.payment_method_Sign2Pay:first').addClass('ignore').hide();});</script>";
+      $out = "<script>jQuery(function($){ $('#payment li.payment_method_Sign2Pay:first').addClass('ignore');});</script>";
+
       if ( $this->description ) {
         $out .= $this->description;
       }
