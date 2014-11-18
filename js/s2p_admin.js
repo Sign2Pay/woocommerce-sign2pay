@@ -30,7 +30,7 @@
       };
 
       var options = {
-        url: "http://" + window.s2p_domain +"/api/"+ window.s2p_api_version+"/application/validate",
+        url: "https://" + window.s2p_domain +"/api/"+ window.s2p_api_version+"/application/validate",
         type: "POST",
         data : {"format" : "json", purchase : purchase},
         beforeSend : function(xhr){
@@ -68,7 +68,7 @@
     var supportedCountries = function(){
 
       var options = {
-        url: "http://" + window.s2p_domain +"/api/"+ window.s2p_api_version+"/countries.json",
+        url: "https://" + window.s2p_domain +"/api/"+ window.s2p_api_version+"/countries.json",
         type: "GET",
         data : {"format" : "json"}
       };
