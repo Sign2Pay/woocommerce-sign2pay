@@ -19,7 +19,9 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
         $this->debug                = true;
         $this->order_button_text    = __( 'Proceed to Sign2Pay', 'woocommerce' );
         $this->notify_url           = WC()->api_request_url( 'WC_Gateway_Sign2Pay' );
-        $this->s2p_domain           = "sign2pay.com";
+        $this->s2p_domain           = "sign2pay.dev";
+        $this->s2p_api_version      = "v2";
+        $this->log_path             = wc_get_log_file_path( 'sign2pay' );
         $this->serving_from         = $this->get_implementation_url();
 
         // Create plugin fields and settings
@@ -29,9 +31,9 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
         // Get setting values
         foreach ( $this->settings as $key => $val ) $this->$key = $val;
 
-        // Load plugin checkout icon
-        $this->icon         = WP_PLUGIN_URL . "/" . plugin_basename( dirname(__FILE__)) . '/images/s2p_logo_receipt.png';
-
+        // Load plugin icons
+        $this->icon           = WP_PLUGIN_URL . "/" . plugin_basename( dirname(__FILE__)) . '/images/s2p_logo_receipt.png';
+        $this->settings_icon  = WP_PLUGIN_URL . "/" . plugin_basename( dirname(__FILE__)) . '/images/s2p_logo_white.png';
         // style
         wp_register_style( 's2pStyleSheet', plugins_url('css/s2p.css', __FILE__) );
         wp_register_style( 's2pAdminStyleSheet', plugins_url('css/s2p_admin.css', __FILE__) );
@@ -53,7 +55,6 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
 
         // Payment listener/API hook
         add_action( 'woocommerce_api_wc_gateway_sign2pay', array( $this, 'check_s2p_postback' ) );
-
 
     }
 
@@ -131,7 +132,7 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
         'type'        => 'checkbox',
         'label'       => __( 'Enable logging', 'woocommerce' ),
         'default'     => 'no',
-        'description' => sprintf( __( 'Log Sign2Pay events, such as IPN requests, inside <code>%s</code>', 'woocommerce' ), wc_get_log_file_path( 'sign2pay' ) )
+        'description' => sprintf( __( 'Log Sign2Pay events, such as IPN requests. <a id="show_log_path" href="#show_log_path">view log path<input class="log_path" type="hidden" value="%s" /></a>', 'woocommerce' ), wc_get_log_file_path( 'sign2pay' ) )
       ),
       'api_details' => array(
         'title'       => __( 'API Credentials', 'woocommerce' ),

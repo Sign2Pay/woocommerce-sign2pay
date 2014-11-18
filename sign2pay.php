@@ -44,6 +44,20 @@ function woocommerce_updater_notice() {
 add_action( 'admin_init', 'woocommerce_updater_notice' );
 
 
+function currency_admin_notice() {
+  $plugin = plugin_basename( __FILE__ );
+  $plugin_data = get_plugin_data( __FILE__, false );
+
+  if(get_woocommerce_currency() != "EUR"){
+    if( is_plugin_active($plugin) ) {
+      deactivate_plugins( $plugin );
+      wp_die( "<strong>".$plugin_data['Name']."</strong> currently processes EURO payments only but your shop is set to ".get_woocommerce_currency().". <br /><br />Back to the WordPress <a href='".get_admin_url(null, 'plugins.php')."'>Plugins page</a>." );
+    }
+  }
+}
+
+add_action( 'plugins_loaded', 'currency_admin_notice' );
+
 if ( ! function_exists( 'woothemes_queue_update' ) ) {
   require_once( 'includes/woo-includes/woo-functions.php' );
 }

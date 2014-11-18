@@ -1,51 +1,119 @@
+.s2p_wrap{
+  padding:1em;
+}
+.s2p_wrap *{
+  box-sizing: border-box;
+}
 .s2p_header{
-  padding: 1em 0;
-
+  margin:1em 0;
+  text-align: center;
+  padding: 1em;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #4381c3), color-stop(1, #6eb3eb));
+  background-image: -o-linear-gradient(bottom, #4381c3 0%, #6eb3eb 100%);
+  background-image: -moz-linear-gradient(bottom, #4381c3 0%, #6eb3eb 100%);
+  background-image: -webkit-linear-gradient(bottom, #4381c3 0%, #6eb3eb 100%);
+  background-image: -ms-linear-gradient(bottom, #4381c3 0%, #6eb3eb 100%);
+  background-image: linear-gradient(to bottom, #4381c3 0%, #6eb3eb 100%);
+  border-bottom: 1px solid #4381c3;
+  -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 0 rgba(0, 0, 0, 0.1);
+  color:white;
+}
+.s2p_header a.s2p_supported_countries{
+  font-weight: bold;
+  color:#fff;
 }
 .s2p_title{
   display: inline;
 }
 .s2p_title img{
-  max-height: 50px;
+  max-height: 75px;
+  margin: 1em auto 0;
+}
+
+.s2p_header p.s2p_byline{
+  margin-top: 20px;
+  color: #FFF;
+  font-family: 'HelveticaNeue-UltraLight', 'Helvetica Neue UltraLight', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-weight: 100;
+  letter-spacing: 1px;
+  font-size: 20px;
+  line-height: 1em;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+  margin-bottom: 0;
+}
+.s2p_left_col{
+  float:left;
+  width:65%;
+}
+
+.s2p_right_col{
+  float:right;
+  width:30%;
+}
+
+.s2p_clear{
+  clear: both;
 }
 .s2p_links{
+  width:100%;
+  display: block;
   padding:1em;
-  float:right;
   margin-bottom: 1em;
   border-radius: 6px;
-  font-size: 13px;
   font-weight: normal;
-  text-shadow: 0 1px 0 #fff;
-  margin: 0 16px;
   color: #5b5b65;
   min-height: 47px;
   background: #f0f0f2;
-  background-image: -webkit-linear-gradient(#f5f5f7, #e9e9ea);
-  background-image: -moz-linear-gradient(#f5f5f7, #e9e9ea);
-  background-image: -ms-linear-gradient(#f5f5f7, #e9e9ea);
-  background-image: -o-linear-gradient(#f5f5f7, #e9e9ea);
-  background-image: linear-gradient(#f5f5f7,#e9e9ea);
-  border: 1px solid #909090;
+  background-image: -webkit-linear-gradient(#fff, #f5f5f7);
+  background-image: -moz-linear-gradient(#fff, #f5f5f7);
+  background-image: -ms-linear-gradient(#fff, #f5f5f7);
+  background-image: -o-linear-gradient(#fff, #f5f5f7);
+  background-image: linear-gradient(#f5f5f7,#f5f5f7);
+  border: 1px solid #e9e9ea;
   -webkit-background-clip: padding-box;
   -moz-background-clip: padding;
   background-clip: padding-box;
 }
 
-.s2p_links h4{
+.s2p_links a{
+  color: #5b5b65;
+}
+
+.s2p_links a{
+  color: #5b5b65;
+}
+
+.s2p_links h4, .wc-settings-sub-title {
   margin-top: 0;
+  font-size: 1.2em;
+  text-transform: uppercase;
+  margin: 0 0 1em;
+  font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  color:#7a7a7a;
+  border-bottom: 1px solid #e9e9ea;
+  padding-bottom:3px;
+}
+.wc-settings-sub-title {
+  margin-top:0.5em;
+}
+table.s2p_settings.form-table{
+  margin-top:0.5em;
+}
+
+.s2p_settings code{
+  font-size: 10px;
+  font-family: courier;
 }
 .s2p_clearfix{
   clear:both;
 }
 
-#s2p_validate_settings a{
-  -webkit-appearance: button;
+#s2p_validate_settings a, .s2p_sign_up a, .s2p_sign_in a, #s2p_save_settings a{
   cursor: pointer;
   display: inline-block;
   padding: 6px 12px;
   margin-bottom: 0;
-  font-size: 14px;
-  font-weight: 400;
   line-height: 1.42857143;
   text-align: center;
   white-space: nowrap;
@@ -59,11 +127,57 @@
   border: 1px solid transparent;
   border-radius: 4px;
   color: #fff;
-  background-color: #428bca;
+  background-color: #49A3CC;
   border-color: #357ebd;
-  padding: 10px 16px;
-  font-size: 18px;
   line-height: 1.33;
   border-radius: 6px;
   text-decoration: none;
+  float:left;
+  margin-right:2%;
+  font-size: 17px;
+  line-height:1.5em;
+}
+#s2p_save_settings a{
+  margin-right:0;
+}
+
+.s2p_sign_up a, .s2p_sign_in a {
+  width:100%;
+  display:block;
+  margin: 0;
+  border-size:2px;
+  background-color: #7DBB3B;
+  border-color: #6da333;
+}
+
+
+@media screen and ( max-width: 782px ) {
+ .s2p_left_col{
+    width:100%;
+  }
+.s2p_right_col{
+  margin-right: 10px;
+}
+  .s2p_header{
+    width:66%;
+    float:left;
+    border-radius: 6px;
+    border:none;
+     margin-top:0;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .s2p_header{
+    width:100%;
+    padding:0;
+    margin-top:0;
+  }
+  .s2p_right_col{
+    width:100%;
+    margin: 0;
+  }
+  .woocommerce table.form-table input.regular-input{
+    width:100%;
+  }
 }
