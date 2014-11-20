@@ -17,8 +17,10 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
         $this->id                   = 'Sign2Pay';
         $this->has_fields           = false;
         $this->debug                = true;
+        $this->logger               = null;
         $this->order_button_text    = __( 'Proceed to Sign2Pay', 'woocommerce' );
         $this->notify_url           = WC()->api_request_url( 'WC_Gateway_Sign2Pay' );
+        $this->protocol             = "https";
         $this->s2p_domain           = "sign2pay.com";
         $this->s2p_api_version      = "v2";
         $this->log_path             = wc_get_log_file_path( 'sign2pay' );
@@ -34,6 +36,7 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
         // Load plugin icons
         $this->icon           = WP_PLUGIN_URL . "/" . plugin_basename( dirname(__FILE__)) . '/images/s2p_logo_receipt.png';
         $this->settings_icon  = WP_PLUGIN_URL . "/" . plugin_basename( dirname(__FILE__)) . '/images/s2p_logo_white.png';
+
         // style
         wp_register_style( 's2pStyleSheet', plugins_url('css/s2p.css', __FILE__) );
         wp_register_style( 's2pAdminStyleSheet', plugins_url('css/s2p_admin.css', __FILE__) );
@@ -44,17 +47,20 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
         wp_register_script( 's2pAdminJS', plugins_url('js/s2p_admin.js', __FILE__), array('jquery'), SIGN2PAY__VERSION, true );
         wp_register_script( 's2pSweetJS', plugins_url('js/sweet-alert.min.js', __FILE__), array('jquery'), SIGN2PAY__VERSION, true );
 
-        // All WC Action hooks
-        add_action( 'woocommerce_update_options_payment_gateways_' . $this->id  , array($this, 'process_admin_options'));
+        // Backend Hooks
         add_action( 'admin_notices'                                             , array($this, 'perform_ssl_check'    ));
-        add_action( 'woocommerce_review_order_before_submit'                    , array($this, 'risk_assessment_js'   ));
-        add_action( 'woocommerce_receipt_' . $this->id                          , array($this, 'inline_sign2pay'      ));
-        add_action( 'woocommerce_thankyou'                                      , array($this, 'thankyou_page'        ));
+        add_action( 'woocommerce_update_options_payment_gateways_' . $this->id  , array($this, 'process_admin_options'));
 
-        add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+        // Frontend Hooks
+        if("yes" == $this->enabled){
+          add_action( 'woocommerce_review_order_before_submit'                    , array($this, 'risk_assessment_js'   ));
+          add_action( 'woocommerce_receipt_' . $this->id                          , array($this, 'inline_sign2pay'      ));
+          add_action( 'woocommerce_thankyou'                                      , array($this, 'thankyou_page'        ));
+          add_action( 'wp_enqueue_scripts'                                        , array( $this, 'enqueue_scripts'     ));
 
-        // Payment listener/API hook
-        add_action( 'woocommerce_api_wc_gateway_sign2pay', array( $this, 'check_s2p_postback' ) );
+          // Payment listener/API hook
+          add_action( 'woocommerce_api_wc_gateway_sign2pay'                       , array( $this, 'check_s2p_postback' ) );
+        }
 
     }
 
@@ -66,15 +72,10 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
      * @param string $message
      */
     public function log( $message ) {
+      global $woocommerce;
 
-      if ( version_compare( WOOCOMMERCE_VERSION, '2.1', '<' ) ) {
-        global $woocommerce;
-
-        if ( ! is_object( $this->logger ) )
-          $this->logger = $woocommerce->logger();
-      } else {
-        if ( ! is_object( $this->logger ) )
-          $this->logger = new WC_Logger();
+      if ( !is_object( $this->logger ) ){
+        $this->logger = new WC_Logger();
       }
 
       $this->logger->add( 'sign2pay', $message );

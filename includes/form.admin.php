@@ -11,6 +11,7 @@
   window.s2p_domain       = "<?php echo $this->s2p_domain; ?>";
   window.s2p_api_version  = "<?php echo $this->s2p_api_version; ?>";
   window.s2p_log_path     = "<?php echo $this->log_path; ?>";
+  window.s2p_protocol     = "<?php echo $this->protocol; ?>";
 
 </script>
 

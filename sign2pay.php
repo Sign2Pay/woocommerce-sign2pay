@@ -48,10 +48,12 @@ function currency_admin_notice() {
   $plugin = plugin_basename( __FILE__ );
   $plugin_data = get_plugin_data( __FILE__, false );
 
-  if(get_woocommerce_currency() != "EUR"){
-    if( is_plugin_active($plugin) ) {
-      deactivate_plugins( $plugin );
-      wp_die( "<strong>".$plugin_data['Name']."</strong> currently processes EURO payments only but your shop is set to ".get_woocommerce_currency().". <br /><br />Back to the WordPress <a href='".get_admin_url(null, 'plugins.php')."'>Plugins page</a>." );
+  if (class_exists( 'WooCommerce' ) ){
+    if(get_woocommerce_currency() != "EUR"){
+      if( is_plugin_active($plugin) ) {
+        deactivate_plugins( $plugin );
+        wp_die( "<strong>".$plugin_data['Name']."</strong> currently processes EURO payments only but your shop is set to ".get_woocommerce_currency().". <br /><br />Back to the WordPress <a href='".get_admin_url(null, 'plugins.php')."'>Plugins page</a>." );
+      }
     }
   }
 }

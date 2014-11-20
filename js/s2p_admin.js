@@ -30,7 +30,7 @@
       };
 
       var options = {
-        url: "https://" + window.s2p_domain +"/api/"+ window.s2p_api_version+"/application/validate",
+        url: window.s2p_protocol+"://" + window.s2p_domain +"/api/"+ window.s2p_api_version+"/application/validate",
         type: "POST",
         data : {"format" : "json", purchase : purchase},
         beforeSend : function(xhr){
@@ -68,7 +68,7 @@
     var supportedCountries = function(){
 
       var options = {
-        url: "https://" + window.s2p_domain +"/api/"+ window.s2p_api_version+"/countries.json",
+        url: window.s2p_protocol+"://" + window.s2p_domain +"/api/"+ window.s2p_api_version+"/countries.json",
         type: "GET",
         data : {"format" : "json"}
       };
