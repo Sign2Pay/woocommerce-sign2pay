@@ -49,6 +49,24 @@
       </div>
 
       <div class="s2p_links">
+        <h4>S2P Application URLs</h4>
+        <ul>
+          <li>
+            <p>
+            <label>Your Implementation URL: </label>
+            <pre><code><?php echo $this->serving_from; ?></code></pre>
+            </p>
+          </li>
+          <li>
+            <p>
+              <label>Your Postback URL: </label>
+              <pre><code><?php echo $this->serving_from; ?>?wc-api=WC_Gateway_Sign2Pay</code></pre>
+            </p>
+          </li>
+        </ul>
+      </div>
+
+      <div class="s2p_links">
         <h4>Related Links</h4>
         <ul>
           <li>

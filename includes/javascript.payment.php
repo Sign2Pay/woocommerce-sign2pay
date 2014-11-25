@@ -23,7 +23,7 @@
         }
 
         $.blockUI({
-          message: "' . esc_js( __( 'Thank you for your order. We are now initializing Sign2Pay to authourize your payment.', "woothemes" ) ) . '",
+          message: "' . esc_js( __( 'Thank you for your order. We are now initializing Sign2Pay to authorize your payment.', "woothemes" ) ) . '",
           baseZ: 99999,
           overlayCSS:
           {
