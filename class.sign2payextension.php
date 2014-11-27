@@ -43,7 +43,6 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
         wp_register_style( 's2pSweetStyleSheet', plugins_url('css/sweet-alert.css', __FILE__) );
 
         // javascripts
-        wp_register_script( 'jquery-blockui', WC()->plugin_url() . '/assets/js/jquery-blockui/jquery.blockUI.min.js', array( 'jquery' ), '2.66', true );
         wp_register_script( 's2pAdminJS', plugins_url('js/s2p_admin.js', __FILE__), array('jquery'), SIGN2PAY__VERSION, true );
         wp_register_script( 's2pSweetJS', plugins_url('js/sweet-alert.min.js', __FILE__), array('jquery'), SIGN2PAY__VERSION, true );
 
@@ -179,7 +178,7 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
      */
     public function payment_fields()
     {
-      $out = "<script>jQuery(function($){ $('#payment li.payment_method_Sign2Pay:first').addClass('ignore');});</script>";
+      $out = "<script>jQuery(function($){ $('#payment li.payment_method_Sign2Pay:first').addClass('ignore');$('.payment_method_Sign2Pay label img').wrap('<div class=\'icon_wrap\'></div>');});</script>";
 
       if ( $this->description ) {
         $out .= $this->description;

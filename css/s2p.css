@@ -1,12 +1,24 @@
-.payment_method_Sign2Pay{
-  display:none;
+li.payment_method_Sign2Pay{
   overflow: auto;
   clear:both;
 }
 
 .payment_method_Sign2Pay label img{
   max-width:100px;
+}
+
+.payment_method_Sign2Pay label .icon_wrap{
+  background-color: white;
+  border-radius: 4px;
+  padding:0.5em;
+  width:auto;
+  float:right;
+  overflow: auto;
   margin-top: 10px;
+}
+
+.payment_box.payment_method_Sign2Pay{
+
 }
 
 .initializing{
