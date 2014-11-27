@@ -7,95 +7,6 @@
  */
 ?>
 
-<style>
-.initializing{
-  text-align: center;
-  padding:2em;
-  width:66%;
-  max-width: 300px;
-  margin: 0 auto 1.5em;
-  border-radius: 12px;
-  text-align: center;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #4381c3), color-stop(1, #6eb3eb));
-  background-image: -o-linear-gradient(bottom, #4381c3 0%, #6eb3eb 100%);
-  background-image: -moz-linear-gradient(bottom, #4381c3 0%, #6eb3eb 100%);
-  background-image: -webkit-linear-gradient(bottom, #4381c3 0%, #6eb3eb 100%);
-  background-image: -ms-linear-gradient(bottom, #4381c3 0%, #6eb3eb 100%);
-  background-image: linear-gradient(to bottom, #4381c3 0%, #6eb3eb 100%);
-  border-bottom: 1px solid #4381c3;
-  -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 0 rgba(0, 0, 0, 0.1);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 0 rgba(0, 0, 0, 0.1);
-  color:white;
-}
-.initializing h1 img{
-  margin: auto;
-  width:66%;
-  max-width: 200px;
-  padding: 0;
-  border:none;
-  background-color: transparent;
-
-}
-
-.woocommerce-checkout .type-page h1::before{
-  display:none;
-}
-.initializing h4{
-  margin-bottom: 1em;
-  font-family: 'HelveticaNeue-UltraLight', 'Helvetica Neue UltraLight', 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  font-weight: 300;
-  letter-spacing: 1px;
-  font-size: 20px;
-  line-height: 1em;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
-  color:white;
-}
-.loading{
-  margin: 0 auto 1.5em;
-  width:30px;
-}
-
-.s2p_banks_wrap{
-    width:50px;
-    margin: 0 auto 1em;
-}
-.s2p_banks_wrap img{
-  width:50px;
-}
-
-#sign2pay.reinit{
-  cursor: pointer;
-  display: inline-block;
-  padding: 6px 12px;
-  margin-bottom: 0;
-  line-height: 1.42857143;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  background-image: none;
-  border: 2px solid transparent;
-  border-radius: 4px;
-  color: #fff;
-  background-color: #49A3CC;
-  border-color: #357ebd;
-  line-height: 1.33;
-  border-radius: 6px;
-  text-decoration: none;
-  margin-right:2%;
-  font-size: 17px;
-  line-height:1.5em;
-  border-size:2px;
-  background-color: #7DBB3B;
-  border-color: #6da333;
-}
-
-</style>
-
 <div class="initializing">
   <h1>
     <img src="https://s3-eu-west-1.amazonaws.com/s2p/sign2PayLogo_2x.png"/>
@@ -136,7 +47,6 @@
       jQuery(".s2p-button-text").text("Pay with Sign2Pay");
       jQuery("#sign2pay").addClass("reinit");
     }
-
   };
 
   (function() {
@@ -147,6 +57,4 @@
     t = document.getElementsByTagName('body')[0];
     t.appendChild(s);
   })();
-
-
 </script>
