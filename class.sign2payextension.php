@@ -20,8 +20,18 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
         $this->logger               = null;
         $this->order_button_text    = __( 'Proceed to Sign2Pay', 'woocommerce' );
         $this->notify_url           = WC()->api_request_url( 'WC_Gateway_Sign2Pay' );
+
         $this->protocol             = "https";
         $this->s2p_domain           = "sign2pay.com";
+        $this->merchant_js          = "//". $this->s2p_domain . "/merchant.js";
+
+        $this->dev_mode               = false;
+        if($this->dev_mode == true){
+          $this->protocol             = "http";
+          $this->s2p_domain           = "sign2pay.dev";
+          $this->merchant_js          = "//". $this->s2p_domain . "/assets/merchant.js";
+        }
+
         $this->s2p_api_version      = "v2";
         $this->log_path             = wc_get_log_file_path( 'sign2pay' );
         $this->serving_from         = $this->get_implementation_url();
@@ -241,11 +251,9 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
 
     /*
      * Get checkout payment url
+
      */
     protected function get_checkout_payment_url( $order ){
-      if ( version_compare( WOOCOMMERCE_VERSION, '2.1', '<' ) ) {
-        return add_query_arg('order', $order->id, add_query_arg('key', $order->order_key, get_permalink(woocommerce_get_page_id('pay'))));
-      }
       return $order->get_checkout_payment_url( true);
     }
 
@@ -266,6 +274,11 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
       "timestamp",
       "signature"
     );
+
+      if ( 'yes' == $this->debug ) {
+        $output = serialize($s2p_postback);
+        $this->log('Postback - Received: ' . $output, "error");
+      }
 
     $requirements_met = (count(array_diff($required_keys, array_keys($s2p_postback))) == 0);
 
@@ -303,10 +316,10 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
   public function check_order($s2p_postback){
     $order_id   = $s2p_postback["ref_id"];
     $order      = new WC_Order( (int) $order_id);
-    $status = $order->status;
-    $payable = "pending";
+    $status     = $order->status;
+    $payable    = array("pending","failed");
 
-    if($status != $payable){
+    if(!in_array($status, $payable)){
 
       if(empty($status)){
         $message =  'Order does not exist';
@@ -402,27 +415,40 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
 
       $order = new WC_Order( (int) $order_id);
 
-      header( 'HTTP/1.1 200 OK' );
-      // Mark Payment as completed
-      $order->add_order_note( __('Payment completed', "woothemes") );
-      $order->payment_complete();
+      if($status == "mandate_valid"){
+        header( 'HTTP/1.1 200 OK' );
+        // Mark Payment as completed
+        $order->add_order_note( __('Sign2Pay Payment completed', "woothemes") );
+        $order->payment_complete();
 
-      // empty woocommerce cart
-      $woocommerce->cart->empty_cart();
+        // empty woocommerce cart
+        $woocommerce->cart->empty_cart();
 
-      $redirect = $this->get_return_url( $order );
+        $redirect = $this->get_return_url( $order );
 
-      $arr = array('status' => "success",
-         'redirect_to' => $redirect,
-         'params' => array(
-             "total"          => $amount,
-             "id"             => $order_id,
-             "purchase_id"    => $purchase_id,
-             "signature"      => true,
-             "status"         => $status,
-             "authorization"  => $timestamp
-         )
-      );
+        $arr = array('status' => "success",
+           'redirect_to' => $redirect,
+           'params' => array(
+               "total"          => $amount,
+               "id"             => $order_id,
+               "purchase_id"    => $purchase_id,
+               "signature"      => true,
+               "status"         => $status,
+               "authorization"  => $timestamp
+           )
+        );
+
+
+      }else{
+        header( 'HTTP/1.1 200 OK' );
+        $error_message = "Sign2Pay Payment failed";
+        $order->add_order_note( __($error_message, "woothemes") );
+        wc_add_notice( __('Payment error:', 'woothemes') . $error_message, 'error' );
+        $order->update_status('failed', __($error_message, 'woothemes'));
+
+        $redirect = $this->get_return_url( $order );
+        $arr      = $this->postback_failed_with_redirect($redirect, $error_message);
+      }
 
       $reponse = json_encode($arr);
       echo $reponse;

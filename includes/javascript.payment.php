@@ -52,7 +52,7 @@
   (function() {
     var s = document.createElement("script");
     s.type = "text/javascript";
-    s.src = <?php echo "'//" . $this->s2p_domain . "/merchant.js';" ?>
+    s.src = "<?php echo $this->merchant_js ?>";
     s.async = true;
     t = document.getElementsByTagName('body')[0];
     t.appendChild(s);
