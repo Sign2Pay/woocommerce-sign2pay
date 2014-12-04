@@ -22,11 +22,25 @@
         $(".s2p_sign_up").closest(".s2p_links").hide()
       }
     }
+
+    var missingRequired = function(missing){
+      msg = "";
+      if(missing.length > 0){
+        msg += "<div style='text-align:left; margin-top:1em;'>Below are required before you'll be able to process live payments with Sign2Pay:";
+        msg += "<ol>";
+        $.each(missing, function(i,item){
+          msg += "<li style='padding-left:0.5em; '>" + item.message + "</li>";
+        });
+        msg += "</ol></div>";
+      }
+      return msg;
+    };
+
     var validateSettings = function(){
 
       var purchase = {
-        merchant_id: $("#woocommerce_Sign2Pay_merchant_id").val(),
-        token : $("#woocommerce_Sign2Pay_token").val()
+        merchant_id : $("#woocommerce_Sign2Pay_merchant_id").val(),
+        token       : $("#woocommerce_Sign2Pay_token").val()
       };
 
       var options = {
@@ -41,21 +55,44 @@
 
       $.ajax(options)
         .done(function(){
-          console.log("all done");
+          // console.log("all done");
         })
         .success(function(response){
           if(typeof(response.error) != "undefined"){
-            sweetAlert("Oops...", "Seems like your settings are incorrect. \n\n Please verify by signing into your Sign2Pay Merchant Admin.", "error");
+            sweetAlert("Oops...", "<p>Seems like your settings are incorrect.</p><p>Please verify by signing into your <a href='https://merchant.sign2pay.com'>Sign2Pay Merchant Admin.</a></p>", "error");
           }else{
-            sweetAlert("Yeehaw...", "Looks like you're good to go!", "success");
+
+            app_mode = response.mode;
+            mode_msg = "<div class='innerMessage' style='padding:1em;'>";
+            mode_msg += "<p style='text-align:left; margin-top:1em;'> This app is in <strong>'" + app_mode + "'</strong> mode. ";
+
+            switch(app_mode) {
+              case "test":
+                  mode_msg += "Sign2Pay will be displayed on desktop for test viewing.</p>";
+                  break;
+              case "live":
+                  mode_msg += "Sign2Pay will be displayed as a payment option on mobile devices.</p>";
+                  break;
+              case "fail":
+                  mode_msg += "This mode allows you to test the flow when a payment/postback fails.</p>";
+                  break;
+              default:
+                mode_msg += "</p>";
+            }
+
+            if(typeof(response.payment_requirements) != "undefined"){
+              mode_msg += missingRequired(response.payment_requirements);
+            }
+
+            mode_msg += "</div>";
+            sweetAlert("Yeehaw...", "Your settings look good!" + mode_msg, "success");
           }
-          console.log("all good");
+          // console.log("all good");
         })
         .fail(function(response){
-          sweetAlert("Oops...", "Seems like your settings are incorrect. \n\n Please verify by signing into your Sign2Pay Merchant Admin.", "error");
-          console.log("not good");
+          sweetAlert("Oops...", "<p>Seems like your settings are incorrect. </p><p>Please verify by signing into your <a href='https://merchant.sign2pay.com'>Sign2Pay Merchant Admin.</a></p>", "error");
+          // console.log("not good");
       });
-
     };
     // end of validateSettings
 
@@ -104,7 +141,7 @@
     // show log path
     $("a#show_log_path").on("click", function(e){
       e.preventDefault();
-      sweetAlert("Your Sign2Pay Log Path", "You'll find your S2P log file at: \n\n "  + window.s2p_log_path);
+      sweetAlert("Your Sign2Pay Log Path", "You'll find your S2P log file at: <p> "  + window.s2p_log_path + "</p>");
     });
 
 

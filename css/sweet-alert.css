@@ -38,7 +38,7 @@
     font-weight: 600;
     text-transform: none;
     position: relative; }
-  .sweet-alert p {
+  .sweet-alert p, .sweet-alert section{
     color: #797979;
     font-size: 16px;
     text-align: center;
