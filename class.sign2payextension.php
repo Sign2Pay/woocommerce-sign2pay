@@ -25,7 +25,7 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
         $this->s2p_domain           = "sign2pay.com";
         $this->merchant_js          = "//". $this->s2p_domain . "/merchant.js";
 
-        $this->dev_mode               = true;
+        $this->dev_mode               = false;
         if($this->dev_mode == true){
           $this->protocol             = "http";
           $this->s2p_domain           = "sign2pay.dev";
