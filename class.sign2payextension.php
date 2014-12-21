@@ -25,7 +25,7 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
         $this->s2p_domain           = "sign2pay.com";
         $this->merchant_js          = "//". $this->s2p_domain . "/merchant.js";
 
-        $this->dev_mode               = false;
+        $this->dev_mode               = true;
         if($this->dev_mode == true){
           $this->protocol             = "http";
           $this->s2p_domain           = "sign2pay.dev";
@@ -188,7 +188,7 @@ class WC_Gateway_Sign2Pay extends WC_Payment_Gateway
      */
     public function payment_fields()
     {
-      $out = "<script>jQuery(function($){ $('#payment li.payment_method_Sign2Pay:first').addClass('ignore');$('.payment_method_Sign2Pay label img').wrap('<div class=\'icon_wrap\'></div>');});</script>";
+      $out = "<script>jQuery(function($){ $('#payment li.payment_method_Sign2Pay:first').hide().addClass('ignore');$('.payment_method_Sign2Pay label img').wrap('<div class=\'icon_wrap\'></div>');});</script>";
 
       if ( $this->description ) {
         $out .= $this->description;
