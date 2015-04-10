@@ -7,18 +7,21 @@ li.payment_method_Sign2Pay{
   max-width:100px;
 }
 
-.payment_method_Sign2Pay label .icon_wrap{
+.payment_method_Sign2Pay .s2p_banks_wrap{
   background-color: white;
   border-radius: 4px;
   padding:0.5em;
   width:auto;
-  float:right;
+  float:left;
   overflow: auto;
   margin-top: 10px;
+  max-width:50px;
+  margin-left:1.5em;
 }
 
 .payment_box.payment_method_Sign2Pay{
-
+  min-height:40px;
+  margin-left:1.65em;
 }
 
 .initializing{

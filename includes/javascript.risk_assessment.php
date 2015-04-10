@@ -16,6 +16,7 @@
       token: <?php echo '"' . $this->get_option( 'token' ) .'"' ?>,
       checkout_type: 'single',
       domain : <?php echo '"' . $this->s2p_domain .'"' ?>,
+      ux_type: "submit",
       map:{
         first_name: '#billing_first_name',
         last_name: '#billing_last_name',
